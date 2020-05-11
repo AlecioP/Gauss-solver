@@ -1,47 +1,25 @@
 (*INIT*)
 dimension = 2;
-AppendTo[$Path, NotebookDirectory[]];
-<< AlgebricUtil.wl;
-<< GuiUtil.wl;
-(*Variable "matrice" is still undef*)
-
-inputmatrix = createMatrix[dimension, matrice];
-(*Create numbers matrix*)
-matrice = matrixConstructor[dimension];
+operation = "SUM";
+eqList = {"", ""};
+displayF1 = " ";
+displayF2 = " ";
 eqPointer = 1;
-(*Move to pkg*)
-(*Graphic place holder*)
-
-gph = Panel[" ", Background -> Transparent];
-rowSelector[dim_, container_] := Module[{i, l},
-   l = List[];
-   For[i = 1, i <= dim, i++,
-    With[{i0 = i},
-      AppendTo[l, 
-       Button["R" <> ToString[i0], container = "R" <> ToString[i0], 
-        FrameMargins -> 0]]
-      ];
-    ];
-   Return[Column[l]];
-   ];
-(*Move to pkg*)
-Clear[container];
-rowsB = rowSelector[dimension, container];
 coef1 = 1;
 coef2 = 1;
-operation = "SUM";
-Dynamic[operation
-  eqPointer
-  eqList[[1]]
-  eqList[[2]]
-  container
-  matrice
-  displayF1
-  displayF2
-  coef1
-  coef2]
-Panel[Grid[{{"Dimension : ", 
-    RadioButtonBar[Dynamic[dimension], Range[2, 3]]}}]]
+AppendTo[$Path, NotebookDirectory[]];
+(*Import Algebric first, cause it's functions are used in Guiutil*)
+<< 
+  AlgebricUtil.wl;
+<< GuiUtil.wl;
+(*Create numbers matrix*)
+matrice = matrixConstructor[dimension];
+
+ Dynamic[
+ If[operation == "SUM", displayF1 = fieldCoef1;, displayF1 = " "]; " "]
+Dynamic[If[operation == "SUM", displayF2 = fieldCoef2;, 
+  displayF2 = " "]; " "]
+dimensionPanel
  Dynamic[
  (*Clear in order to make "createMatrix" replace its arg with \
 "matrice"*)
@@ -54,89 +32,10 @@ Panel[Grid[{{"Dimension : ",
  the output of this dynamic is infact the empty string*)
  " "
  ]
-swapOperation[matrice_, lop_, rop_] := 
-  Module[{m = matrice, r1 = lop, r2 = rop, i, len, swap},
-   len = Length[m[[1]]];
-   For[i = 1, i <= len, i++,
-    swap = m[[r1, i]];
-    With[{val  = swap},
-     m[[r1, i]] = m[[r2, i]];
-     m[[r2, i]] = val;
-     ];(*<With*)
-    ];(*<For*)
-   Return[m];
-   ];
-sumOperation[matrice_, lop_, rop_, c1_, c2_] := 
-  Module[{m = matrice, r1 = lop, r2 = rop, i, len, C1 = c1, C2 = c2},
-   len = Length[m[[1]]];
-   For[i = 1, i <= len, i++,
-    m[[r1, i]] = m[[r1, i]]*C1 + m[[r2, i]]*C2;
-    ];
-   Return[m];
-   ];
-(*Button to evaluate equation*)
-goButton = Button["=", Dynamic[
-    If[operation == "SUM",
-     matrice = sumOperation[matrice,
-       ToExpression[StringDelete[eqList[[1]], "R"]],
-       ToExpression[StringDelete[eqList[[2]], "R"]],
-       coef1, coef2](*<sumOp*);
-     eqPointer = 1;
-     eqList[[1]] = " ";
-     eqList[[2]] = " ";
-     coef1 = 1;
-     coef1 = 1;
-     ,(*else*)
-     matrice = swapOperation[matrice,
-       ToExpression[StringDelete[eqList[[1]], "R"]],
-       ToExpression[StringDelete[eqList[[2]], "R"]]];(*<swapOp*)
-     
-     eqPointer = 1;
-     eqList[[1]] = " ";
-     eqList[[2]] = " ";
-     ](*<If*)
-    ](*<Dynamic*)(*,ContentPadding\[Rule]False,
-   Alignment\[Rule]Left,ImageSize\[Rule]{20,20}*)];(*<Button*)
 (*GUI to display the equation beeing composed*)
-eqList = {"", ""};
-fieldCoef1 = InputField[Dynamic[coef1], Number, FieldSize -> {5, 1}];
-fieldCoef2 = InputField[Dynamic[coef2], Number, FieldSize -> {5, 1}];
- Dynamic[
- If[operation == "SUM", displayF1 = fieldCoef1;, displayF1 = " "]; " "]
-Dynamic[If[operation == "SUM", displayF2 = fieldCoef2;, 
-  displayF2 = " "]; " "]
-Dynamic[equationbox = Row[
-   {displayF1, gph,
-    Panel[Dynamic[eqList[[1]]], 
-     Background -> 
-      Dynamic[If[eqPointer == 1, LightBlue, Automatic]]],
-    gph, "+", gph,
-    displayF2, gph,
-    Panel[Dynamic[eqList[[2]]], 
-     Background -> 
-      Dynamic[If[eqPointer == 2, LightBlue, Automatic]]],
-    gph, goButton, gph, 
-    Dynamic[eqList[[1]](*<Part*)]}];(*<Row*)" " ](*<Dynamic*)
-(*Buttons to select the kind of operation to perform on the matrix*)
 
-operB = Row[{Button["Swap", operation = "SWAP";], gph, 
-    Button["Sum", operation = "SUM";]}];
-(*GUI creation*)
-Dynamic[
- Panel[Row[{Grid[{{MatrixForm[inputmatrix](*<MatrixForm*), rowsB}(*<
-      G_row*)}(*<G_matrix*)](*<Grid*), gph, 
-    Column[{operB, gph, equationbox}](*<Column*)}](*<
-  Row*)](*<Panel*)](*<Dynamic*)
-\!\(
-DynamicBox[ToBoxes[
-Panel[
-Row[{
-Grid[{{
-MatrixForm[$CellContext`inputmatrix], $CellContext`rowsB}}], \
-$CellContext`gph, 
-Column[{$CellContext`operB, $CellContext`gph, \
-$CellContext`equationbox}]}]], StandardForm],
-ImageSizeCache->{35.919000000000004`, {6., 9.256}}]\)
+
+Dynamic[composedGUI](*<Dynamic*)
 (*Listen on "dimension" change and reset buttons to select matrix \
 rows for the equation*)
 Dynamic[Refresh[
@@ -155,9 +54,9 @@ Dynamic[
 eqPointer = 1;
 eqList = {" ", " "};
 (*Evaluate cell only at release time*)
-(*
-\
-AppendTo[$Path,NotebookDirectory[]];
-<<MakeGui.wl;
+(*CHECK EVALUATABLE CELL \
+PROPERTY*)
+AppendTo[$Path, NotebookDirectory[]];
+<< MakeGui.wl;
 makeGUI[];
-*)
+Button["Edit Notebook", editNB[]]
