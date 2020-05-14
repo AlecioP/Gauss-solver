@@ -7,6 +7,11 @@ displayF2 = " ";
 eqPointer = 1;
 coef1 = 1;
 coef2 = 1;
+hint = " ";
+errorMsg = " ";
+showHint = False;
+showError = False;
+editMatrix = True;
 AppendTo[$Path, NotebookDirectory[]];
 (*Import Algebric first, cause it's functions are used in Guiutil*)
 << 
@@ -20,22 +25,21 @@ matrice = matrixConstructor[dimension];
 Dynamic[If[operation == "SUM", displayF2 = fieldCoef2;, 
   displayF2 = " "]; " "]
 dimensionPanel
- Dynamic[
- (*Clear in order to make "createMatrix" replace its arg with \
+ Dynamic[Clear[matrice]; 
+ Refresh[inputmatrix = createMatrix[dimension, matrice]; 
+  matrice = matrixConstructor[dimension], 
+  TrackedSymbols -> {dimension}]; " "]
+(*Clear in order to make "createMatrix" replace its arg with \
 "matrice"*)
- Clear[matrice];
- Refresh[
-  inputmatrix = createMatrix[dimension, matrice]; 
-  matrice = matrixConstructor[dimension], TrackedSymbols -> {dimension}
-  ];
- (*Instead of printing Null, evaluating the empty string, 
- the output of this dynamic is infact the empty string*)
- " "
- ]
-(*GUI to display the equation beeing composed*)
-
+(*Instead of printing Null, evaluating the empty string, 
+the output of this dynamic is infact the empty string*)
 
 Dynamic[composedGUI](*<Dynamic*)
+Dynamic[If[showError == True, GuiUtil`errorPanel, " "]]
+Dynamic[If[showHint == True, GuiUtil`hintPanel, " "]]
+
+Dynamic[showHint]
+Dynamic[showError]
 (*Listen on "dimension" change and reset buttons to select matrix \
 rows for the equation*)
 Dynamic[Refresh[

@@ -12,6 +12,9 @@ swapOperation::usage = "swapOperation[Matrix,First,Second]. Returns a copy of Ma
 sumOperation::usage = "sumOperation[Matrix,First,Second,C1,C2]. Returns a copy of Matrix with row First replaced by the sum C1*First+C2*Second"
 
 
+solveMatrix::usage = ""
+
+
 Begin["`Private`"]
 
 
@@ -42,6 +45,37 @@ sumOperation[matrice_,lop_,rop_,c1_,c2_]:=Module[{m = matrice,r1 =lop,r2 = rop,i
 		m[[r1,i]] = m[[r1,i]]*C1 + m[[r2,i]]*C2;
 	];
 	Return[m];
+];
+solveMatrix[m_] := Module[{i,j,len,c1,c2,opp,matrice = m,hint,op},
+(*{"swap",1,2} "swap,1,2"
+{"sum",1,2,5,6}*)
+	hint = List[];
+	len = Length[matrice[[1]]];
+	For[i=1,i<= len,i++,
+		If[matrice[[i,i]]==0,
+			(*SWAP*)
+			For[j=i+1,j<=len,j++,
+				If[matrice[[j,i]]!=0,
+					matrice = swapOperation[matrice,j,i];
+					op = "swap,"<>ToString[j]<>","<>ToString[i];
+					AppendTo[hint,op];
+					i=i-1;
+					Break[];	
+				];(*<IF*)
+			];(*<FOR*)
+			,(*SUM*)
+			For[j=i+1,j<=len,j++,
+				If[matrice[[j,i]]==0,Continue[];];
+				opp = - matrice[[i,i]];
+				c1 = opp/matrice[[j,i]];
+				c2 = 1;
+				matrice = sumOperation[matrice,j,i,c1,c2];
+				op = "sum,"<>ToString[j]<>","<>ToString[i]<>","<>ToString[c1,InputForm]<>","<>ToString[c2,InputForm];
+				AppendTo[hint,op];
+			];(*<For*)
+		];(*<If*)	
+	];(*<For*)
+	Return[hint];
 ];
 
 

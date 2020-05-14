@@ -23,6 +23,8 @@ editNB := Module[{nb},
 	nb = EvaluationNotebook[];
 	NotebookFind[EvaluationNotebook[],"Input",All,CellStyle];
 	SetOptions[NotebookSelection[nb],CellOpen->True,ShowCellBracket->True];
+	NotebookFind[EvaluationNotebook[],"Output",All,CellStyle];
+	SetOptions[NotebookSelection[nb],ShowCellBracket->True];
 ];
 
 
