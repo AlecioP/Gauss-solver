@@ -359,7 +359,7 @@ Cell[BoxData[
 },
 InitializationCellEvaluation->True,
 WindowSize->{1438, 755},
-WindowMargins->{{1280, Automatic}, {Automatic, 280}},
+WindowMargins->{{1280, Automatic}, {Automatic, 331}},
 TaggingRules->{"TryRealOnly" -> False},
 InitializationCell->True,
 ShowCellLabel->False,
