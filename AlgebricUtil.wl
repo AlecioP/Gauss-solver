@@ -49,7 +49,8 @@ sumOperation[matrice_,lop_,rop_,c1_,c2_]:=Module[{m = matrice,r1 =lop,r2 = rop,i
 solveMatrix[m_] := Module[{i,j,len,c1,c2,opp,matrice = m,hint,op},
 (*{"swap",1,2} "swap,1,2"
 {"sum",1,2,5,6}*)
-	hint = "";
+	hint = List[];
+	
 	len = Length[matrice[[1]]];
 	For[i=1,i<= len,i++,
 		If[matrice[[i,i]]==0,
@@ -58,13 +59,7 @@ solveMatrix[m_] := Module[{i,j,len,c1,c2,opp,matrice = m,hint,op},
 				If[matrice[[j,i]]!=0,
 					matrice = swapOperation[matrice,j,i];
 					op = "Swap Row "<>ToString[j]<>" and Row "<>ToString[i];
-					hint = hint<>op;
-					If[$OperatingSystem == "Windows", 
-						(*Concatenate LF CR*)
-						hint<>FromCharacterCode[10]<>FromCharacterCode[13];
-					,(*else*)
-						hint = hint <>"\n";
-					];(*If*)
+					hint=AppendTo[hint,List[op]];
 					i=i-1;
 					Break[];	
 				];(*<IF*)
@@ -77,17 +72,11 @@ solveMatrix[m_] := Module[{i,j,len,c1,c2,opp,matrice = m,hint,op},
 				c2 = 1;
 				matrice = sumOperation[matrice,j,i,c1,c2];
 				op = "Sum "<>ToString[c1,InputForm]<>" times Row "<>ToString[j]<>" and "<>ToString[c2,InputForm]<>" times Row "<>ToString[i];
-				hint = hint<>op;
-				If[$OperatingSystem == "Windows", 
-						(*Concatenate LF CR*)
-						hint<>FromCharacterCode[10]<>FromCharacterCode[13];
-				,(*else*)
-						hint = hint <>"\n";
-				];(*If*)
+				hint=AppendTo[hint,List[op]];
 			];(*<For*)
 		];(*<If*)	
 	];(*<For*)
-	Return[hint];
+	Return[Grid[hint]];
 ];
 
 
