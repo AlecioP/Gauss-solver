@@ -206,6 +206,29 @@ lastRow1 := Panel[Row[{setMatrixButton,gph,resetMatrixButton}],Background->Gray]
 lastRow2 := Panel[Row[{hintButton}],Background->Gray];
 
 
+plotConstructor := Module[{x,y,z},
+	If[Global`dimension==2,
+		Return[
+			ContourPlot[{
+				Global`matrice[[1,1]]x+Global`matrice[[1,2]]y == 0,
+				Global`matrice[[2,1]]x+Global`matrice[[2,2]]y == 0
+			},{x,-20,20},{y,-20,20},Background->LightBlue](*<ContPlt*)
+		];(*<Return*)
+	,(*<else*)
+		Return[ContourPlot3D[{
+				Global`matrice[[1,1]]x+Global`matrice[[1,2]]y+Global`matrice[[1,3]]z == 0,
+				Global`matrice[[2,1]]x+Global`matrice[[2,2]]y+Global`matrice[[2,3]]z == 0,
+				Global`matrice[[3,1]]x+Global`matrice[[3,2]]y+Global`matrice[[3,3]]z == 0
+			},{x,-20,20},{y,-20,20},{z,-20,20},Background->LightBlue](*<ContPlt3*)
+		];(*<Return*)
+	];(*If*)
+	
+];
+
+
+plotArea := Dynamic[plotConstructor]
+
+
 composedGUI := Panel[Grid[{
 		{
 			Grid[{
@@ -218,9 +241,10 @@ composedGUI := Panel[Grid[{
 				](*<If*),rowsB}(*<G_row*)
 			}(*<G_matrix*)](*<Grid*),
 			gph,
-			Column[{operB,gph,Dynamic[equationbox]}](*<Column*)
+			Column[{operB,gph,Dynamic[equationbox]}](*<Column*),
+			Column[{plotArea,lastRow2},Alignment->{Right,Top}]
 		},
-		{Row[{lastRow2},Alignment->Right]}}(*<Gird arg list*)](*<Grid*),Background->Gray
+		{Row[{gph}]}}(*<Gird arg list*)](*<Grid*),Background->Gray
 	](*<Panel*);
 	
 
