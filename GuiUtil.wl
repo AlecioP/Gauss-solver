@@ -45,6 +45,9 @@ errorPanel::usage = "Panel containing error messages for the user"
 checkInputMatrix::usage = "Check if the user insert valid values for the matrix"
 
 
+successPanel::usage = "Panel to show success message"
+
+
 Begin["`Private`"]
 
 
@@ -55,6 +58,18 @@ operB := Row[{Button["Swap",Global`operation="SWAP";],gph,Button["Sum",Global`op
 
 
 dimensionPanel := Panel[Grid[{{"Dimension : ",RadioButtonBar[Dynamic[Global`dimension],Range[2,3]]}}],Background->Gray];
+
+
+checkSolved[matrix_] := Module[{i,j,len},
+	len = Length[matrix];
+	For[i=1,i<=len,i++,
+		For[j=1,j<=len,j++,
+			(*Lower Triangular's element non zero*)
+			If[i>j && matrix[[i,j]]!=0,Return[False];];
+		];(*For*)
+	];(*For*)
+	Return[True];
+];
 
 
 goButton := Button["=",Dynamic[
@@ -82,7 +97,12 @@ goButton := Button["=",Dynamic[
 		Global`eqList[[1]]=" ";
 		Global`eqList[[2]]=" ";
 	](*<If*)
-](*<Dynamic*),Enabled->Dynamic[If[Global`editMatrix==True,False,True]]];(*<Button*)
+	If[checkSolved[Global`matrice]==True,Global`showSuccess=True;]
+](*<Dynamic*),Enabled->Dynamic[If[
+									Global`editMatrix==True || 
+									Global`showSuccess==True ||
+									StringMatchQ[Global`eqList[[1]],"R*"]==False ||
+									StringMatchQ[Global`eqList[[2]],"R*"]==False,False,True]]];(*<Button*)
 
 
 fieldCoef1 := InputField[Dynamic[Global`coef1],Expression,FieldSize->{5,1}];
@@ -155,7 +175,7 @@ inputmatrix := createMatrix[Global`dimension,Global`matrice];
 Global`hint := AlgebricUtil`solveMatrix[Global`matrice];
 
 
-hintButton := Button["?" ,Global`showHint=True];
+hintButton := Button["?" ,Global`showHint=True,Enabled->Dynamic[If[Global`editMatrix==True,False,True]]];
 
 
 hintPanel  := Panel[Global`hint,Background->LightBlue];
@@ -186,6 +206,7 @@ Dynamic[
 		Global`showError=False;
 		Global`editMatrix=False;
 		Global`hint = AlgebricUtil`solveMatrix[Global`matrice];
+		If[checkSolved[Global`matrice]==True,Global`showSuccess=True;]
 	,(*<else*)
 		Global`showError = True;
 		Global`errorMsg = "Element at position "<>
@@ -197,7 +218,15 @@ Dynamic[
 ](*<Button*)
 
 
-resetMatrixButton := Button["Reset",Global`editMatrix=True;Global`matrice = AlgebricUtil`matrixConstructor[Global`dimension]];
+resetMatrixButton := Button["Reset",
+								Global`editMatrix=True;
+								Global`matrice = AlgebricUtil`matrixConstructor[Global`dimension]; 
+								Global`showError = False; 
+								Global`showHint=False;
+								Global`showSuccess=False;
+								Global'eqList={" "," "};
+								Global`eqPointer=1;
+					];
 
 
 lastRow1 := Panel[Row[{setMatrixButton,gph,resetMatrixButton}],Background->Gray];
@@ -250,6 +279,9 @@ composedGUI := Panel[Grid[{
 
 
 errorPanel := Panel[Dynamic[Global`errorMsg],Background->LightRed];
+
+
+successPanel := Panel["The system is solved",Background->LightGreen];
 
 
 End[]
