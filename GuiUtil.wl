@@ -54,7 +54,11 @@ Begin["`Private`"]
 gph := Panel[" ",Background->Gray];
 
 
-operB := Row[{Button["Swap",Global`operation="SWAP";],gph,Button["Sum",Global`operation = "SUM";]}];
+operB := Row[{
+				Button["Swap",Global`operation="SWAP";,Enabled->Dynamic[If[Global`operation=="SWAP",False,True]]],
+				gph,
+				Button["Sum",Global`operation = "SUM";,Enabled->Dynamic[If[Global`operation=="SWAP",True,False]]]
+}];
 
 
 dimensionPanel := Panel[Grid[{{"Dimension : ",RadioButtonBar[Dynamic[Global`dimension],Range[2,3]]}}],Background->Gray];
@@ -215,7 +219,7 @@ Dynamic[
 							" is nor a Rational or an Integer";
 	];(*<If*)
 ](*<Dynamic*)
-](*<Button*)
+,Enabled->Dynamic[If[Global`editMatrix==True,True,False]]](*<Button*)
 
 
 resetMatrixButton := Button["Reset",
@@ -224,9 +228,9 @@ resetMatrixButton := Button["Reset",
 								Global`showError = False; 
 								Global`showHint=False;
 								Global`showSuccess=False;
-								Global'eqList={" "," "};
+								Global`eqList={" "," "};
 								Global`eqPointer=1;
-					];
+					,Enabled->Dynamic[If[Global`editMatrix==True,False,True]]];
 
 
 lastRow1 := Panel[Row[{setMatrixButton,gph,resetMatrixButton}],Background->Gray];
@@ -266,7 +270,7 @@ composedGUI := Panel[Grid[{
 				{If[Global`editMatrix == True,
 					MatrixForm[Global`inputmatrix](*<MatrixForm*)
 				,(*<else*)
-					MatrixForm[Global`matrice]
+					Style[MatrixForm[Global`matrice],Large]
 				](*<If*),rowsB}(*<G_row*)
 			}(*<G_matrix*)](*<Grid*),
 			gph,
@@ -281,7 +285,7 @@ composedGUI := Panel[Grid[{
 errorPanel := Panel[Dynamic[Global`errorMsg],Background->LightRed];
 
 
-successPanel := Panel["The system is solved",Background->LightGreen];
+successPanel := Panel["The matrix is reduced",Background->LightGreen];
 
 
 End[]

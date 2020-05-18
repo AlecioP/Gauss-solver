@@ -25,68 +25,7 @@ matrice = matrixConstructor[dimension];
  If[operation == "SUM", displayF1 = fieldCoef1;, displayF1 = " "]; " "]
 Dynamic[If[operation == "SUM", displayF2 = fieldCoef2;, 
   displayF2 = " "]; " "]
-\!\(
-DynamicBox[ToBoxes[
-   If[$CellContext`operation == 
-      "SUM", $CellContext`displayF1 = GuiUtil`fieldCoef1; 
-      Null, $CellContext`displayF1 = " "]; " ", StandardForm],
-ImageSizeCache->{35.919000000000004`, {6., 9.256}}]\)
-\!\(
-DynamicBox[ToBoxes[
-   If[$CellContext`operation == 
-      "SUM", $CellContext`displayF2 = GuiUtil`fieldCoef2; 
-      Null, $CellContext`displayF2 = " "]; " ", StandardForm],
-ImageSizeCache->{35.919000000000004`, {6., 9.256}}]\)
 dimensionPanel
-\!\(
-PanelBox[
-TagBox[GridBox[{
-{"\<\"Dimension : \"\>", 
-InterpretationBox[
-StyleBox[
-RowBox[{GridBox[{
-{
-RadioButtonBox[Dynamic[$CellContext`dimension], {2},
-DefaultBaseStyle->"RadioButtonBar"], 
-StyleBox["2", "RadioButtonBarLabel",
-StripOnInput->False]}
-},
-AutoDelete->False,
-BaselinePosition->{1, 2},
-GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Baseline}}},
-GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
-GridBoxSpacings->{"Columns" -> {
-Offset[0.27999999999999997`], {
-Offset[0.21]}, 
-Offset[0.27999999999999997`]}, "Rows" -> {
-Offset[0.2], {
-Offset[0.4]}, 
-Offset[0.2]}}], "  ", GridBox[{
-{
-RadioButtonBox[Dynamic[$CellContext`dimension], {3},
-DefaultBaseStyle->"RadioButtonBar"], 
-StyleBox["3", "RadioButtonBarLabel",
-StripOnInput->False]}
-},
-AutoDelete->False,
-BaselinePosition->{1, 2},
-GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Baseline}}},
-GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
-GridBoxSpacings->{"Columns" -> {
-Offset[0.27999999999999997`], {
-Offset[0.21]}, 
-Offset[0.27999999999999997`]}, "Rows" -> {
-Offset[0.2], {
-Offset[0.4]}, 
-Offset[0.2]}}]}], "Deploy"],
-RadioButtonBar[
-Dynamic[$CellContext`dimension], {2, 3}]]}
-},
-AutoDelete->False,
-GridBoxItemSize->{
-      "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
-"Grid"],
-Background->GrayLevel[0.5]]\)
  Dynamic[Clear[matrice]; 
  Refresh[inputmatrix = createMatrix[dimension, matrice]; 
   matrice = matrixConstructor[dimension], 
@@ -96,33 +35,11 @@ Background->GrayLevel[0.5]]\)
 (*Instead of printing Null, evaluating the empty string, 
 the output of this dynamic is infact the empty string*)
 
-\!\(
-DynamicBox[ToBoxes[
-   Clear[$CellContext`matrice]; 
-    Refresh[$CellContext`inputmatrix = 
-       GuiUtil`createMatrix[$CellContext`dimension, \
-$CellContext`matrice]; $CellContext`matrice = 
-       AlgebricUtil`matrixConstructor[$CellContext`dimension], 
-      TrackedSymbols -> {$CellContext`dimension}]; " ", StandardForm],
-   
-ImageSizeCache->{35.919000000000004`, {6., 9.256}}]\)
-Dynamic[composedGUI](*<Dynamic*)
-\!\(
-DynamicBox[ToBoxes[GuiUtil`composedGUI, StandardForm],
-ImageSizeCache->{35.919000000000004`, {6., 9.256}}]\)
-Dynamic[
-   If[showError == True, GuiUtil`errorPanel, ""]
-  If[showHint == True, GuiUtil`hintPanel, ""]
-  If[showSuccess == True, GuiUtil`successPanel, ""]
- ]
-\!\(
-DynamicBox[
-   ToBoxes[(
-     If[$CellContext`showError == True, GuiUtil`errorPanel, ""] 
-     If[$CellContext`showHint == True, GuiUtil`hintPanel, ""]) 
-    If[$CellContext`showSuccess == True, GuiUtil`successPanel, ""], 
-    StandardForm],
-ImageSizeCache->{35.919000000000004`, {6., 9.256}}]\)
+Dynamic[Refresh[composedGUI]](*<Dynamic*)
+Dynamic[  If[showError == True, GuiUtil`errorPanel, ""]]
+Dynamic[If[showHint == True, GuiUtil`hintPanel, ""]]
+Dynamic[If[showSuccess == True, GuiUtil`successPanel, ""]]
+
 (*Listen on "dimension" change and reset buttons to select matrix \
 rows for the equation*)
 Dynamic[Refresh[
@@ -136,17 +53,6 @@ Dynamic[Refresh[
   showError = False;
   showSuccess = False; " ", TrackedSymbols -> {dimension}]
  ]
-\!\(
-DynamicBox[ToBoxes[
-Refresh[Clear[$CellContext`container]; $CellContext`eqPointer = 0; 
-     GuiUtil`rowsB = 
-      GuiUtil`rowSelector[$CellContext`dimension, \
-$CellContext`container]; $CellContext`editMatrix = 
-      True; $CellContext`eqList = {"", ""}; $CellContext`showHint = 
-      False; $CellContext`showError = False; $CellContext`showSuccess = 
-      False; " ", TrackedSymbols -> {$CellContext`dimension}], 
-    StandardForm],
-ImageSizeCache->{35.919000000000004`, {6., 9.256}}]\)
 (*Listen on "container" change and update equation list*)
 Dynamic[
  Refresh[
@@ -154,14 +60,6 @@ Dynamic[
   If[eqPointer == 2, " ", eqPointer = eqPointer + 1];
   " ", TrackedSymbols -> {container}]
  ]
-\!\(
-DynamicBox[ToBoxes[
-Refresh[Part[$CellContext`eqList, $CellContext`eqPointer] = \
-$CellContext`container; 
-     If[$CellContext`eqPointer == 2, 
-       " ", $CellContext`eqPointer = $CellContext`eqPointer + 1]; " ",
-      TrackedSymbols -> {$CellContext`container}], StandardForm],
-ImageSizeCache->{35.919000000000004`, {6., 9.256}}]\)
 eqPointer = 1;
 eqList = {" ", " "};
 (*Evaluate cell only at release time*)
@@ -171,9 +69,3 @@ AppendTo[$Path, NotebookDirectory[]];
 << MakeGui.wl;
 makeGUI[];
 Button["Edit Notebook", editNB[]]
-\!\(
-ButtonBox["\<\"Edit Notebook\"\>",
-Appearance->Automatic,
-ButtonFunction:>MakeGui`editNB[],
-Evaluator->Automatic,
-Method->"Preemptive"]\)
