@@ -3,10 +3,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[         0,          0]
-NotebookDataLength[     18014,        422]
-NotebookOptionsPosition[     16242,        372]
-NotebookOutlinePosition[     16760,        392]
-CellTagsIndexPosition[     16717,        389]
+NotebookDataLength[     18122,        424]
+NotebookOptionsPosition[     16350,        374]
+NotebookOutlinePosition[     16868,        394]
+CellTagsIndexPosition[     16825,        391]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -234,7 +234,7 @@ Cell[BoxData[{
   3.798632484314636*^9}, {3.798632564923798*^9, 3.798632609019513*^9}, {
   3.798632655783251*^9, 3.7986326796372232`*^9}, {3.7987860992117*^9, 
   3.7987861136761923`*^9}},
- CellLabel->"In[53]:=",ExpressionUUID->"077be2be-0d05-44e3-98dc-decce570db3c"],
+ CellLabel->"In[44]:=",ExpressionUUID->"077be2be-0d05-44e3-98dc-decce570db3c"],
 
 Cell[BoxData[
  RowBox[{
@@ -277,7 +277,7 @@ Cell[BoxData[
    3.798025050063342*^9, 3.798025126161521*^9}, {3.798634455340671*^9, 
    3.798634467002789*^9}, {3.798634630887698*^9, 3.7986346781609373`*^9}, 
    3.798635009721457*^9},
- CellLabel->"In[45]:=",ExpressionUUID->"ac66dfc6-e67b-4cf0-92ce-671df593ff2f"],
+ CellLabel->"In[47]:=",ExpressionUUID->"ac66dfc6-e67b-4cf0-92ce-671df593ff2f"],
 
 Cell[BoxData[
  RowBox[{
@@ -315,7 +315,7 @@ Cell[BoxData[
    3.797952496449245*^9}, {3.798025014151155*^9, 3.7980250707765303`*^9}, {
    3.798117894303239*^9, 3.798117894624218*^9}, {3.79811796592974*^9, 
    3.798117981770105*^9}, {3.798119428518405*^9, 3.798119429749956*^9}},
- CellLabel->"In[46]:=",ExpressionUUID->"695826a4-fe12-4bed-badd-a9596f16e02e"],
+ CellLabel->"In[48]:=",ExpressionUUID->"695826a4-fe12-4bed-badd-a9596f16e02e"],
 
 Cell[BoxData[{
  RowBox[{
@@ -329,7 +329,7 @@ Cell[BoxData[{
  InitializationCell->False,
  ShowCellTags->False,
  CellChangeTimes->{3.798119438621076*^9},
- CellLabel->"In[47]:=",ExpressionUUID->"cf6b8d25-0b46-40a0-8df7-3c539168c414"],
+ CellLabel->"In[49]:=",ExpressionUUID->"cf6b8d25-0b46-40a0-8df7-3c539168c414"],
 
 Cell[BoxData[
  RowBox[{
@@ -348,8 +348,9 @@ Cell[BoxData[
    "\[IndentingNewLine]", 
    RowBox[{
     RowBox[{"<<", "MakeGui.wl"}], ";"}], "\[IndentingNewLine]", 
-   RowBox[{
-    RowBox[{"makeGUI", "[", "]"}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{"Button", "[", 
+    RowBox[{"\"\<GUI Only\>\"", ",", 
+     RowBox[{"makeGUI", "[", "]"}]}], "]"}], "\[IndentingNewLine]", 
    RowBox[{"Button", "[", 
     RowBox[{"\"\<Edit Notebook\>\"", ",", 
      RowBox[{"editNB", "[", "]"}]}], "]"}]}]}]], "Input",
@@ -367,8 +368,9 @@ Cell[BoxData[
    3.798198270550589*^9}, {3.798198344648304*^9, 3.798198370934552*^9}, {
    3.798199396235199*^9, 3.7981994506279697`*^9}, {3.798204038860939*^9, 
    3.7982040417004967`*^9}, {3.79820589970542*^9, 3.7982059039379587`*^9}, {
-   3.798376727717495*^9, 3.798376728545429*^9}},
- CellLabel->"In[49]:=",ExpressionUUID->"4b5aada5-d760-418a-8f4d-75d053f01783"]
+   3.798376727717495*^9, 3.798376728545429*^9}, {3.7987982813595123`*^9, 
+   3.798798311591949*^9}},
+ CellLabel->"In[55]:=",ExpressionUUID->"4b5aada5-d760-418a-8f4d-75d053f01783"]
 },
 InitializationCellEvaluation->True,
 WindowSize->{1280, 755},
@@ -414,7 +416,7 @@ Cell[12419, 281, 1651, 36, 136, "Input",ExpressionUUID->"695826a4-fe12-4bed-badd
 Cell[14073, 319, 447, 12, 52, "Input",ExpressionUUID->"cf6b8d25-0b46-40a0-8df7-3c539168c414",
  CellOpen->True,
  InitializationCell->False],
-Cell[14523, 333, 1715, 37, 136, "Input",ExpressionUUID->"4b5aada5-d760-418a-8f4d-75d053f01783",
+Cell[14523, 333, 1823, 39, 136, "Input",ExpressionUUID->"4b5aada5-d760-418a-8f4d-75d053f01783",
  CellOpen->True,
  InitializationCell->False]
 }
