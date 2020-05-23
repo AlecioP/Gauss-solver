@@ -1,5 +1,19 @@
 (* ::Package:: *)
 
+(* :Title: AlgebricUtil *)
+(* :Context: AlgebricUtil` *)
+(* :Author: Andrea Ercolessi, Alessio Portaro, Francesco Antimi *)
+(* :Summary: Package contenente le funzioni di utilit\[AGrave] richiamate nel Notebook final.nb *)
+(* :Copyright: Andrea Ercolessi, Alessio Portaro, Francesco Antimi  2020 *)
+(* :Package Version: 23, May 2020 *)
+(* :Mathematica Version: 12.1 *)
+(* :History: *)
+(* :Sources: biblio *)
+(* :Limitations:
+this is a preliminary version, for educational purposes only. *)
+(* :Discussion: *)
+
+
 BeginPackage["AlgebricUtil`"]
 
 
@@ -18,6 +32,7 @@ solveMatrix::usage = ""
 Begin["`Private`"]
 
 
+(*Creazione dei una matrice di dimensione dim. La matrice serve per memorizzare i dati inseriti dall'utente  *)
 matrixConstructor[dim_] := Module[{i,j,m,d=dim},
 	m = List[];
 	For[i=1,i<= d,i++,
@@ -28,6 +43,8 @@ matrixConstructor[dim_] := Module[{i,j,m,d=dim},
 	];
 	Return[m]
 ];
+(*Funzione resituisce una matrice identica a quella di input ma con le righe R1 e R2 invertite.
+  Gli indici delle righe da scambiare sono passati come parametri input*)
 swapOperation[matrice_,lop_,rop_]:=Module[{m = matrice,r1 =lop,r2 = rop,i,len,swap},
 	len =Length[m[[1]]];
 	For[i=1,i<= len,i++,
@@ -39,6 +56,8 @@ swapOperation[matrice_,lop_,rop_]:=Module[{m = matrice,r1 =lop,r2 = rop,i,len,sw
 	];(*<For*)
 	Return[m];
 ];
+(*Funzione resituisce una matrice identica a quella di input ma con la riga R1 sostituita dal risultato dell'operazione C1*R1 + C2*R2.
+  C1 e C2 sono due scalari passati in input alla funzione. R1 e R2 sono gli indici di riga passati in input*)
 sumOperation[matrice_,lop_,rop_,c1_,c2_]:=Module[{m = matrice,r1 =lop,r2 = rop,i,len,C1 =c1,C2=c2},
 	len =Length[m[[1]]];
 	For[i=1,i<= len,i++,
@@ -46,6 +65,8 @@ sumOperation[matrice_,lop_,rop_,c1_,c2_]:=Module[{m = matrice,r1 =lop,r2 = rop,i
 	];
 	Return[m];
 ];
+(*Funzione che restituisce una matrice di stringhe. Ogni stringa rappresenta uno step dell'algoritmo di risoluzione della matrice di input.
+  Il testo restituito verr\[AGrave] visualizzato in un pannello dell'interfaccia grafica qualora l'utente richeda dei suggerimenti*)
 solveMatrix[m_] := Module[{i,j,len,c1,c2,opp,matrice = m,hint,op},
 (*{"swap",1,2} "swap,1,2"
 {"sum",1,2,5,6}*)

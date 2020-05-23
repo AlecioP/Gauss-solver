@@ -1,5 +1,19 @@
 (* ::Package:: *)
 
+(* :Title: GuiUtil *)
+(* :Context: GuiUtil` *)
+(* :Author: Andrea Ercolessi, Alessio Portaro, Francesco Antimi *)
+(* :Summary: Package contenente le componenti grafiche presenti nel Notebook final.nb *)
+(* :Copyright: Andrea Ercolessi, Alessio Portaro, Francesco Antimi  2020 *)
+(* :Package Version: 23, May 2020 *)
+(* :Mathematica Version: 12.1 *)
+(* :History: *)
+(* :Sources: biblio *)
+(* :Limitations:
+this is a preliminary version, for educational purposes only. *)
+(* :Discussion: *)
+
+
 BeginPackage["GuiUtil`"]
 
 
@@ -51,9 +65,11 @@ successPanel::usage = "Panel to show success message"
 Begin["`Private`"]
 
 
+(*Componente grafico per implementare una spaziatura tra i componenti di un intefaccia grafica*)
 gph := Panel[" ",Background->Gray];
 
 
+(*Bottoni per selezionare l'operazione corrente da effetuare sulla matrice.*)
 operB := Row[{
 				Button["Swap",Global`operation="SWAP";,Enabled->Dynamic[If[Global`operation=="SWAP",False,True]]],
 				gph,
@@ -61,9 +77,11 @@ operB := Row[{
 }];
 
 
+(*Pannello nel quale scegliere la dimensione della matrice da creare*)
 dimensionPanel := Panel[Grid[{{"Dimension : ",RadioButtonBar[Dynamic[Global`dimension],Range[2,3]]}}],Background->Gray];
 
 
+(*Funzione creata per verificare lo stato corrente di risoluzione della matrice*)
 checkSolved[matrix_] := Module[{i,j,len},
 	len = Length[matrix];
 	For[i=1,i<=len,i++,
@@ -76,13 +94,18 @@ checkSolved[matrix_] := Module[{i,j,len},
 ];
 
 
+(*Bottone per avviare il calcolo dell'equazione importata*)
 goButton := Button["=",Dynamic[
+(*CAso in cui l'operazione selezionata risulta essere la somma delle righe*)
 	If[Global`operation=="SUM",
+	(*Controllo  per verificare se i dati inseriti siano numeri interi o razionali*)
 		If[MatchQ[Global`coef1, _Rational | _Integer] && MatchQ[Global`coef2, _Rational | _Integer],
+		(*Sostituisco la matrice corrente con il risultato dell'operazione sumOperation *)
 			Global`matrice = AlgebricUtil`sumOperation[Global`matrice,
 				ToExpression[StringDelete[Global`eqList[[1]],"R"]],
 				ToExpression[StringDelete[Global`eqList[[2]],"R"]],
 				Global`coef1,Global`coef2](*<sumOp*);
+				(*Una volta effetuata l'operazione verr\[AGrave] resettata l'iterfaccia grafica *)
 			Global`eqPointer=1;
 			Global`eqList[[1]]=" ";
 			Global`eqList[[2]]=" ";
@@ -90,31 +113,39 @@ goButton := Button["=",Dynamic[
 			Global`coef2 = 1;
 			Global`showError = False;
 		,(*<Else*)
+		(*Viene visualizzato un pannello contenente un messaggio di errore*)
 			Global`showError = True;
 			Global`errorMsg = "Equation coefficients are nor Integers or Rationals";
 		](*<If*)
 	,(*else*)
+	(*Caso in cui l'operazione selezionata risulta essere lo scambio delle righe *)
 		Global`matrice = AlgebricUtil`swapOperation[Global`matrice,
 			ToExpression[StringDelete[Global`eqList[[1]],"R"]],
 			ToExpression[StringDelete[Global`eqList[[2]],"R"]]];(*<swapOp*)
+			(*Sostituisco la matrice corrente con il risultato dell'operazione swapOperation *)
 		Global`eqPointer = 1;
 		Global`eqList[[1]]=" ";
 		Global`eqList[[2]]=" ";
 	](*<If*)
+	(*In questa sezione viene contrallato se la matrice risulta essere risolta ed in tal caso viene visualizzato un messaggio di successo*)
 	If[checkSolved[Global`matrice]==True,Global`showSuccess=True;]
 ](*<Dynamic*),Enabled->Dynamic[If[
+									(*Condizioni per abilitare il bottone*)
 									Global`editMatrix==True || 
 									Global`showSuccess==True ||
 									StringMatchQ[Global`eqList[[1]],"R*"]==False ||
 									StringMatchQ[Global`eqList[[2]],"R*"]==False,False,True]]];(*<Button*)
 
 
+(*Componente grafico per l'input dei coefficenti moltiplicativi *)
 fieldCoef1 := InputField[Dynamic[Global`coef1],Expression,FieldSize->{5,1}];
 
 
+(*Componente grafico per l'input dei coefficenti moltiplicativi *)
 fieldCoef2 := InputField[Dynamic[Global`coef2],Expression,FieldSize->{5,1}];
 
 
+(*Componente grafica che visulizza l'operazione che si sta per applicare alla matrice*)
 equationbox :=
 	Row[
 		{Global`displayF1,
@@ -137,6 +168,7 @@ equationbox :=
 	}];(*<Row*)
 
 
+(*Componete grafica che permette l'input della matrice*)
 createMatrix[dim_,matrix_] := Module[{i,j,m,ph,d=dim},
 	m = List[];
 	For[i=1,i <= d,i++,
@@ -153,6 +185,7 @@ createMatrix[dim_,matrix_] := Module[{i,j,m,ph,d=dim},
 ];(*Module*)
 
 
+(*Bottoni per selezionare le righe alle quale applicare le operazioni*)
 rowSelector[dim_,container_] := Module[{i,l},
 	l = List[];
 	For[i=1,i<=dim,i++,
@@ -179,12 +212,15 @@ inputmatrix := createMatrix[Global`dimension,Global`matrice];
 Global`hint := AlgebricUtil`solveMatrix[Global`matrice];
 
 
+(*Bottone per richiedere l'aiuto *)
 hintButton := Button["?" ,Global`showHint=True,Enabled->Dynamic[If[Global`editMatrix==True,False,True]]];
 
 
+(*Pannello nel quale viene visualizzato il messaggio si aiuto*)
 hintPanel  := Panel[Global`hint,Background->LightBlue];
 
 
+(*Funzione per verificare che tutti i numeri inseriti nella matrice siano interi o razionali*)
 checkInputMatrix[m_] := Module[{i,j,len,ret},
 	len = Length[m];
 	ret = List[];
@@ -203,6 +239,7 @@ checkInputMatrix[m_] := Module[{i,j,len,ret},
 ];(*<Module*)
 
 
+(*Bottone per rendere la matrice non pi\[UGrave] editabile *)
 setMatrixButton := Button["Set",
 Dynamic[
 	If[
@@ -222,6 +259,7 @@ Dynamic[
 ,Enabled->Dynamic[If[Global`editMatrix==True,True,False]]](*<Button*)
 
 
+(*Resetta la matrice corente e permette di inserirne una nuova*)
 resetMatrixButton := Button["Reset",
 								Global`editMatrix=True;
 								Global`matrice = AlgebricUtil`matrixConstructor[Global`dimension]; 
@@ -233,12 +271,15 @@ resetMatrixButton := Button["Reset",
 					,Enabled->Dynamic[If[Global`editMatrix==True,False,True]]];
 
 
+(*Pannello che contiene i bottoni di set e reset*)
 lastRow1 := Panel[Row[{setMatrixButton,gph,resetMatrixButton}],Background->Gray];
 
 
+(*Pannello che contiene il bottone di aiuto*)
 lastRow2 := Panel[Row[{hintButton}],Background->Gray];
 
 
+(*Funzione  utilizzata per graficare le equazioni in input sotto forma di rette o piani *)
 plotConstructor := Module[{x,y,z},
 	If[Global`dimension==2,
 		Return[
@@ -262,6 +303,7 @@ plotConstructor := Module[{x,y,z},
 plotArea := Dynamic[plotConstructor]
 
 
+(*Pannello che compone tutti gli elementi dell'intefaccia grafica*)
 composedGUI := Panel[Grid[{
 		{
 			Grid[{
@@ -282,9 +324,11 @@ composedGUI := Panel[Grid[{
 	
 
 
+(*Pannello che contiene eventuali messaggi di errore*)
 errorPanel := Panel[Dynamic[Global`errorMsg],Background->LightRed];
 
 
+(*Pannello che contiene il messaggio di successo*)
 successPanel := Panel["The matrix is reduced",Background->LightGreen];
 
 
