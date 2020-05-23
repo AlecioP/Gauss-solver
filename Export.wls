@@ -4,7 +4,7 @@
 UsingFrontEnd[
 	Clear[nb];
 	currentDir = DirectoryName[$InputFileName];
-	fn = currentDir <> "Gauss.txt";
-	nb = NotebookOpen[currentDir<>"Gauss.nb"];
+	fn = currentDir <> "Final.txt";
+	nb = NotebookOpen[currentDir<>"Final.nb"];
 	FrontEndExecute[FrontEndToken[nb,"Save",{fn,"Text"}]];
 ]
