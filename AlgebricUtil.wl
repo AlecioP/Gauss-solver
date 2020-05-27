@@ -99,6 +99,55 @@ solveMatrix[m_] := Module[{i,j,len,c1,c2,opp,matrice = m,hint,op},
 	];(*<For*)
 	Return[Grid[hint]];
 ];
+solveMatrixAlg1[m_] := Module[{i,j,len,c1,c2,opp,matrice = m,hint,op,colMax,valMax,iter},
+	hint = List[];
+	len = Length[matrice[[1]]];
+	For[i=1,i<= len,i++,
+	
+		(*Check if the current row contains pivot element with maximum absolute value. 
+		Otherwise swap the row containing the effective maximum with the current row*)
+		colMax = i;
+		valMax = Abs[matrice[[i,i]]];
+		(*Search for the maximum value*)
+		For[iter=i,iter<=len,iter++,
+			If[Abs[matrice[[iter,i]](*<PART*)](*<abs*)>valMax,
+				colMax = iter;
+				valMax = Abs[matrice[[iter,i]](*<PART*)](*<abs*);
+			];(*If*)
+		];(*<For*)
+		
+		(*Swap maximum value row*)
+		If[i!=colMax,
+			matrice = swapOperation[matrice,i,colMax];
+			op = "Swap Row "<>ToString[i]<>" and Row "<>ToString[colMax];
+			hint=AppendTo[hint,List[op]];
+		];(*<If*)
+		
+		If[matrice[[i,i]]==0,
+			(*SWAP*)
+			For[j=i+1,j<=len,j++,
+				If[matrice[[j,i]]!=0,
+					matrice = swapOperation[matrice,j,i];
+					op = "Swap Row "<>ToString[j]<>" and Row "<>ToString[i];
+					hint=AppendTo[hint,List[op]];
+					i=i-1;
+					Break[];	
+				];(*<IF*)
+			];(*<FOR*)
+			,(*SUM*)
+			For[j=i+1,j<=len,j++,
+				If[matrice[[j,i]]==0,Continue[];];
+				opp = - matrice[[i,i]];
+				c1 = opp/matrice[[j,i]];
+				c2 = 1;
+				matrice = sumOperation[matrice,j,i,c1,c2];
+				op = "Sum "<>ToString[c1,InputForm]<>" times Row "<>ToString[j]<>" and "<>ToString[c2,InputForm]<>" times Row "<>ToString[i];
+				hint=AppendTo[hint,List[op]];
+			];(*<For*)
+		];(*<If*)	
+	];(*<FOR*)
+	Return[Grid[hint]];
+];
 
 
 End[]

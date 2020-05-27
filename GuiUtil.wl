@@ -209,7 +209,7 @@ Clear[Global`matrice];
 inputmatrix := createMatrix[Global`dimension,Global`matrice];
 
 
-Global`hint := AlgebricUtil`solveMatrix[Global`matrice];
+Global`hint := AlgebricUtil`solveMatrixAlg1[Global`matrice];
 
 
 (*Bottone per richiedere l'aiuto *)
@@ -246,7 +246,7 @@ Dynamic[
 	Length[checkInputMatrix[Global`matrice]]==0,
 		Global`showError=False;
 		Global`editMatrix=False;
-		Global`hint = AlgebricUtil`solveMatrix[Global`matrice];
+		Global`hint = AlgebricUtil`solveMatrixAlg1[Global`matrice];
 		If[checkSolved[Global`matrice]==True,Global`showSuccess=True;]
 	,(*<else*)
 		Global`showError = True;
